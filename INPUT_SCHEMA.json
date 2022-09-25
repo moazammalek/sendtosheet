@@ -1,0 +1,118 @@
+{
+    "title": "Spreadsheet import input",
+    "type": "object",
+    "schemaVersion": 1,
+    "required": [],
+    "properties": {
+        "mode": {
+            "title": "Mode",
+            "type": "string",
+            "description": "What should the actor do",
+            "enum": ["append", "replace", "modify", "read", "load backup"]
+        },
+        "spreadsheetId": {
+            "title": "Spreadsheet id",
+            "type": "string",
+            "description": "Id of the spreadsheet from where the old data will be loaded",
+            "editor": "textfield"
+        },
+        "publicSpreadsheet": {
+            "title": "Public spreadsheet (read-only)",
+            "type": "boolean",
+            "description": "If checked, you don't need to authorize. You have to publish your spreadsheet and it works only in read mode",
+            "default": false
+        },
+        "datasetId": {
+            "title": "Dataset ID",
+            "type": "string",
+            "description": "Dataset or crawler execution id where the new data will be loaded from",
+            "editor": "textfield",
+            "sectionCaption": "Input data",
+            "sectionDescription": "Only fill in for `append` or `replace` mode. Choose either `Dataset ID` or `Raw data`. Limit and offset is optional."
+        },
+        "rawData": {
+            "title": "Raw data",
+            "type": "array",
+            "description": "Raw data JSON array. Can be array of arrays for direct row import or arrays of objects.",
+            "editor": "json"
+        },
+        "limit": {
+            "title": "Limit items",
+            "type": "integer",
+            "description": "Number of items to take from the dataset. The default is 250000.",
+            "unit": "items",
+            "minimum": 0,
+            "default": 250000
+        },
+        "offset": {
+            "title": "Offset items",
+            "type": "integer",
+            "description": "Number of items to skip from the dataset. Default is 0.",
+            "unit": "items",
+            "minimum": 0,
+            "default": 0
+        },
+        "deduplicateByField": {
+            "title": "Deduplicate by field",
+            "type": "string",
+            "description": "Items will be deduplicated by a value of this field. Cannot be used together with 'Deduplicate by equality' or 'Transform function'.",
+            "editor": "textfield",
+            "sectionCaption": "Deduplication and transformation",
+            "sectionDescription": "Choose up to one way to deduplicate or transform your data."
+        },
+        "deduplicateByEquality": {
+            "title": "Deduplicate by equality",
+            "type": "boolean",
+            "description": "Items will be deduplicated if they are the same. Cannot be used together with 'Deduplicate by field' or 'Transform function'."
+        },
+        "transformFunction": {
+            "title": "Transform function",
+            "type": "string",
+            "description": "Custom function that will take new items and old items arrays as parameters and produces final array that will be imported.  Cannot be used together with 'Deduplicate by equality' or 'Deduplicate by field'",
+            "editor": "javascript",
+            "prefill": "// Uncomment this code only if you don't use \"Deduplicate by field\" or \"Deduplicate by equality\"\n// This code behaves as if there was no transform function\n/*({ spreadsheetData, datasetData }) => {\n    return spreadsheetData.concat(datasetData);\n}*/"
+        },
+        "range": {
+            "title": "Range",
+            "type": "string",
+            "description": "Range of the spreadsheet in A1 notation where the actor should operate. Default is the first sheet.",
+            "editor": "textfield",
+            "sectionCaption": "Miscellaneous"
+        },
+        "columnsOrder": {
+            "title": "Columns order",
+            "type": "array",
+            "description": "Array of keys. First sorts the columns by provided keys. The rest is sorted alphabetically.",
+            "editor": "stringList"
+        },
+        "keepSheetColumnOrder": {
+            "title": "Keep column order from sheet",
+            "type": "boolean",
+            "description": "If true, keeps the order of columns as they are in the sheet. If there is no sheet data yet, this does nothing."
+        },
+        "tokensStore": {
+            "title": "Google OAuth tokens store",
+            "type": "string",
+            "description": "Key-value store where your Google OAuth tokens will be stored so you don't have to authorize every time again. By default it is google-oauth-tokens",
+            "editor": "textfield",
+            "default": "google-oauth-tokens"
+        },
+        "createBackup":{
+            "title": "Create backup",
+            "type": "boolean",
+            "description": "Old rows from your spreadsheet will be saved to the default key-value store before importing new rows."
+        },
+        "backupStore": {
+            "title": "Backup store id",
+            "type": "string",
+            "description": "Id of the key-value store where the backup you want to load is located. Can pnly be used if mode is 'load-backup'",
+            "editor": "textfield"
+        },
+        "googleCredentials": {
+            "title": "Google Developer Console credentials",
+            "type": "object",
+            "description": "If you want to use this actor locally or with your own version, you have to provide your own crednetials. Check actor readme for more information.",
+            "editor": "json"
+        }
+    }
+}
